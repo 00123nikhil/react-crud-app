@@ -14,7 +14,7 @@ const schemaData = mongoose.Schema(
   {
     name: String,
     email: String,
-    mobile: Number,
+    mobile: String,
   },
   {
     timestamp: true,
@@ -77,7 +77,7 @@ http: app.put("/update", async (req, res) => {
 // delete data
 // http://localhost:8000/delete
 /**
- * 
+ *
  */
 app.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
