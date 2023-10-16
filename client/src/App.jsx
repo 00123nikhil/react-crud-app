@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 import "./App.css";
 import { MdClose } from "react-icons/md";
+import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000/";
 function App() {
@@ -12,6 +13,7 @@ function App() {
     email: "",
     mobile: "",
   });
+  const [dataList, setDataList] = useState([]);
 
   const handleOnChange = (e) => {
     const { value, name } = e.target;
@@ -23,11 +25,39 @@ function App() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(formData);
+    const data = await axios.post("/create", formData);
+    console.log(data);
+    if (data.data.success) {
+      setAddSection(false);
+      alert(data.data.message);
+      getFetchData();
+    }
   };
+
+  const getFetchData = async () => {
+    const data = await axios.get("/");
+    console.log(data);
+    if (data.data.success) {
+      setDataList(data.data.data);
+    }
+  };
+  useEffect(() => {
+    getFetchData();
+  }, []);
+
+  console.log(dataList);
+
+  const handleDelete = async (id) => {
+    const data = await axios.delete("/delete/" + id);
+
+    if (data.data.success) {
+      getFetchData();
+      alert(data.data.message);
+    }
+  };
+
   return (
     <>
       <div className="container">
@@ -69,6 +99,43 @@ function App() {
             </form>
           </div>
         )}
+
+        <div className="tablecontainer">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile No.</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataList[0] ? (
+                dataList.map((el) => {
+                  return (
+                    <tr>
+                      <td>{el.name}</td>
+                      <td>{el.email}</td>
+                      <td>{el.mobile}</td>
+                      <td>
+                        <button className="btn btn-edit">Edit</button>
+                        <button
+                          className="btn btn-delete"
+                          onClick={() => handleDelete(el._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <p style={{ textAlign: "center" }}>No data</p>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

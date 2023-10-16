@@ -1,16 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,500;0,600;0,900;1,400&display=swap");
+
 * {
   box-sizing: border-box;
 }
 
 body {
-  background-color: black;
+  background-color: #34495e;
   color: white;
+  font-family: "Poppins", sans-serif;
 }
 
 .container {
   padding: 10px;
   /* background-color: red; */
-  max-width: 700px;
+  max-width: fit-content;
   margin: 50px auto;
 }
 .btn {
@@ -22,7 +25,7 @@ body {
   cursor: pointer;
 }
 .btn-add {
-  background-color: green;
+  background-color: #33b249;
   color: white;
 }
 
@@ -39,7 +42,7 @@ body {
 
 .addContainer form {
   width: 420px;
-  background-color: grey;
+  background-color: #687eff;
   display: flex;
   flex-direction: column;
   padding: 50px 40px;
@@ -55,13 +58,15 @@ body {
   padding: 5px;
   margin-top: 5px;
   margin-bottom: 10px;
+  outline: none;
 }
 
 .addContainer form button {
-  background: royalblue;
+  background: green;
   color: white;
   font-weight: 500;
   margin-top: 20px;
+  font-weight: 500;
 }
 .addContainer form .closebtn {
   margin-left: auto;
@@ -74,4 +79,50 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 5px;
+}
+
+/* tablecontainer */
+.tablecontainer {
+  margin-top: 50px;
+  /* box-shadow: 5px 5px 10px rgba(0,0,0,0.2); */
+  box-shadow: 5px 5px 10px rgb(36, 34, 34);
+  border-radius: 5px;
+  background-color: #c9c5c2;
+  color: black;
+}
+
+.addContainer table {
+  border: 1px solid black;
+}
+
+.tablecontainer table thead tr {
+  background-color: #34495e;
+  color: white;
+}
+
+.tablecontainer table thead tr th,
+.tablecontainer table tbody tr td {
+  border-radius: 5px;
+  min-width: 200px;
+  padding: 7px;
+  text-align: center;
+}
+.tablecontainer table thead tr td {
+  border-bottom: 1px solid #c9c5c2;
+}
+
+/* button  */
+.btn-edit,
+.btn-delete {
+  font-size: 16px;
+  padding: 8px 15px;
+  margin: 0px 10px;
+  color: black;
+  font-weight: 600;
+}
+.btn-edit {
+  background-color: yellow;
+}
+.btn-delete {
+  background-color: red;
 }
