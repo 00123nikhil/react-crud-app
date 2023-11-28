@@ -2,16 +2,24 @@ import { cloneElement, useEffect, useState } from "react";
 import "./App.css";
 import { MdClose } from "react-icons/md";
 import axios from "axios";
+import FormTable from "./Components/FormTable";
 
 axios.defaults.baseURL = "http://localhost:8000/";
 function App() {
   const [addSection, setAddSection] = useState(false);
-
+  const [editSection, setEditSection] = useState(false);
   // to store data
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     mobile: "",
+  });
+
+  const [formDataEdit, setFormDataEdit] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    _id: "",
   });
   const [dataList, setDataList] = useState([]);
 
@@ -58,46 +66,56 @@ function App() {
     }
   };
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const data = await axios.put("/update", formDataEdit);
+    if (data.data.success) {
+      getFetchData();
+      alert(data.data.message);
+      setEditSection(false);
+    }
+  };
+
+  const handleEditOnChange = async (e) => {
+    const { value, name } = e.target;
+    setFormDataEdit((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+  const handleEdit = (el) => {
+    setFormDataEdit(el);
+    setEditSection(true);
+  };
+
   return (
     <>
+      <div className="Head">
+        <h3>CRUD APP</h3>
+      </div>
+
       <div className="container">
         <button className="btn btn-add" onClick={() => setAddSection(true)}>
           Add
         </button>
 
         {addSection && (
-          <div className="addContainer">
-            <form onSubmit={handleSubmit}>
-              <div className="closebtn" onClick={() => setAddSection(false)}>
-                <MdClose />
-              </div>
-              <label htmlFor="name"> Name:</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                onChange={handleOnChange}
-              />
-
-              <label htmlFor="email"> Email:</label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                onChange={handleOnChange}
-              />
-
-              <label htmlFor="mobile"> Mobile:</label>
-              <input
-                type="text"
-                id="mobile"
-                name="mobile"
-                onChange={handleOnChange}
-              />
-
-              <button className="btn">Submit</button>
-            </form>
-          </div>
+          <FormTable
+            handleSubmit={handleSubmit}
+            handleOnChange={handleOnChange}
+            handleClose={() => setAddSection(false)}
+            rest={formData}
+          />
+        )}
+        {editSection && (
+          <FormTable
+            handleSubmit={handleUpdate}
+            handleOnChange={handleEditOnChange}
+            handleClose={() => setEditSection(false)}
+            rest={formDataEdit}
+          />
         )}
 
         <div className="tablecontainer">
@@ -114,12 +132,17 @@ function App() {
               {dataList[0] ? (
                 dataList.map((el) => {
                   return (
-                    <tr>
+                    <tr key={el._id}>
                       <td>{el.name}</td>
                       <td>{el.email}</td>
                       <td>{el.mobile}</td>
                       <td>
-                        <button className="btn btn-edit">Edit</button>
+                        <button
+                          className="btn btn-edit"
+                          onClick={() => handleEdit(el)}
+                        >
+                          Edit
+                        </button>
                         <button
                           className="btn btn-delete"
                           onClick={() => handleDelete(el._id)}

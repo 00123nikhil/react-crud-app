@@ -9,6 +9,13 @@ body {
   color: white;
   font-family: "Poppins", sans-serif;
 }
+.Head {
+  text-align: center;
+  background-color: black;
+  border-radius: 10px;
+  font-size: 18px;
+  padding-block: 2px;
+}
 
 .container {
   padding: 10px;
